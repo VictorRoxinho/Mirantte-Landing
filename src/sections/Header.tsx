@@ -6,7 +6,7 @@ import { Button } from '../components/Button';
 import { CONTACT } from '../lib/constants';
 import { openWhatsApp } from '../lib/utils';
 
-const HeaderContainer = styled.header<{ scrolled: boolean }>`
+const HeaderContainer = styled.header<{ $scrolled: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -14,7 +14,7 @@ const HeaderContainer = styled.header<{ scrolled: boolean }>`
   z-index: 1000;
   background-color: ${theme.colors.primary.hover};
   backdrop-filter: blur(10px);
-  box-shadow: ${(props) => (props.scrolled ? theme.shadows.md : 'none')};
+  box-shadow: ${(props) => (props.$scrolled ? theme.shadows.md : 'none')};
   transition: ${theme.transitions.default};
 `;
 
@@ -65,12 +65,16 @@ export const Header = () => {
   };
 
   return (
-    <HeaderContainer scrolled={scrolled}>
+    <HeaderContainer $scrolled={scrolled}>
       <HeaderContent>
         <Logo>
           <LogoImage src="/miranttle-logo.png" alt="Mirantte" />
         </Logo>
-        <Button variant="secondary" size="medium" onClick={handleWhatsAppClick}>
+        <Button
+          $variant="secondary"
+          $size="medium"
+          onClick={handleWhatsAppClick}
+        >
           <MessageCircle size={20} />
           WhatsApp
         </Button>

@@ -152,10 +152,18 @@ export const Hero = () => {
           Studios e Apartamentos no Costa Azul, Salvador
         </HeroSubtitle>
         <HeroActions>
-          <Button variant="primary" size="large" onClick={handleScheduleClick}>
+          <Button
+            $variant="primary"
+            $size="large"
+            onClick={handleScheduleClick}
+          >
             Agendar Visita
           </Button>
-          <Button variant="outline" size="large" onClick={handleWhatsAppClick}>
+          <Button
+            $variant="outline"
+            $size="large"
+            onClick={handleWhatsAppClick}
+          >
             <MessageCircle size={20} />
             Falar no WhatsApp
           </Button>

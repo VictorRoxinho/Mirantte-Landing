@@ -54,12 +54,12 @@ const TypologyCard = styled.div`
   }
 `;
 
-const TypologyImage = styled.div<{ imageUrl?: string }>`
+const TypologyImage = styled.div<{ $imageUrl?: string }>`
   width: 100%;
   height: 280px;
   background: ${(props) =>
-    props.imageUrl
-      ? `linear-gradient(135deg, rgba(217, 119, 6, 0.3), rgba(180, 83, 9, 0.3)), url(${props.imageUrl})`
+    props.$imageUrl
+      ? `linear-gradient(135deg, rgba(217, 119, 6, 0.3), rgba(180, 83, 9, 0.3)), url(${props.$imageUrl})`
       : `linear-gradient(135deg, ${theme.colors.primary.main}, ${theme.colors.primary.hover})`};
   background-size: cover;
   background-position: center;
@@ -130,7 +130,7 @@ export const Typologies = () => {
         <TypologyGrid>
           {TYPOLOGIES.map((typology) => (
             <TypologyCard key={typology.id}>
-              <TypologyImage imageUrl={typologyImages[typology.id]}>
+              <TypologyImage $imageUrl={typologyImages[typology.id]}>
                 {typology.name}
               </TypologyImage>
               <TypologyBody>
@@ -147,8 +147,8 @@ export const Typologies = () => {
                   ))}
                 </FeatureList>
                 <Button
-                  variant="primary"
-                  size="medium"
+                  $variant="primary"
+                  $size="medium"
                   onClick={handleInterest}
                   style={{ width: '100%' }}
                 >

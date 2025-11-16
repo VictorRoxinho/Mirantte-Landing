@@ -20,7 +20,7 @@ const AccordionItemWrapper = styled.div`
   }
 `;
 
-const AccordionHeader = styled.button<{ isOpen: boolean }>`
+const AccordionHeader = styled.button<{ $isOpen: boolean }>`
   width: 100%;
   padding: ${theme.spacing.md};
   display: flex;
@@ -38,7 +38,7 @@ const AccordionHeader = styled.button<{ isOpen: boolean }>`
 
   svg {
     transition: transform 0.3s ease;
-    transform: ${(props) => (props.isOpen ? 'rotate(180deg)' : 'rotate(0)')};
+    transform: ${(props) => (props.$isOpen ? 'rotate(180deg)' : 'rotate(0)')};
     color: ${theme.colors.primary.main};
   }
 `;
@@ -49,8 +49,8 @@ const AccordionTitle = styled.h3`
   color: ${theme.colors.neutral['900']};
 `;
 
-const AccordionContent = styled.div<{ isOpen: boolean }>`
-  max-height: ${(props) => (props.isOpen ? '1000px' : '0')};
+const AccordionContent = styled.div<{ $isOpen: boolean }>`
+  max-height: ${(props) => (props.$isOpen ? '1000px' : '0')};
   overflow: hidden;
   transition: max-height 0.3s ease;
 `;
@@ -69,11 +69,11 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({
 
   return (
     <AccordionItemWrapper>
-      <AccordionHeader isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
+      <AccordionHeader $isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
         <AccordionTitle>{title}</AccordionTitle>
         <ChevronDown size={24} />
       </AccordionHeader>
-      <AccordionContent isOpen={isOpen}>
+      <AccordionContent $isOpen={isOpen}>
         <AccordionBody>{children}</AccordionBody>
       </AccordionContent>
     </AccordionItemWrapper>

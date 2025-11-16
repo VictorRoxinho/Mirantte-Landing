@@ -238,8 +238,8 @@ export const Contact = () => {
 
               <Button
                 type="submit"
-                variant="primary"
-                size="large"
+                $variant="primary"
+                $size="large"
                 disabled={isSubmitting}
                 style={{ width: '100%' }}
               >

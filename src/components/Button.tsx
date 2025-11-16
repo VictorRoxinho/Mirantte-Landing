@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { theme } from '../styles/theme';
 
 interface ButtonProps {
-  variant?: 'primary' | 'secondary' | 'outline';
-  size?: 'small' | 'medium' | 'large';
+  $variant?: 'primary' | 'secondary' | 'outline';
+  $size?: 'small' | 'medium' | 'large';
 }
 
 export const Button = styled.button<ButtonProps>`
@@ -18,7 +18,7 @@ export const Button = styled.button<ButtonProps>`
 
   /* Sizes */
   ${(props) => {
-    switch (props.size) {
+    switch (props.$size) {
       case 'small':
         return `
           padding: 0.5rem 1rem;
@@ -39,7 +39,7 @@ export const Button = styled.button<ButtonProps>`
 
   /* Variants */
   ${(props) => {
-    switch (props.variant) {
+    switch (props.$variant) {
       case 'secondary':
         return `
           background-color: ${theme.colors.secondary.main};

@@ -51,10 +51,10 @@ const GalleryItem = styled.div`
   box-shadow: ${theme.shadows.md};
 `;
 
-const GalleryImage = styled.div<{ imageUrl: string }>`
+const GalleryImage = styled.div<{ $imageUrl: string }>`
   width: 100%;
   height: 100%;
-  background-image: url(${(props) => props.imageUrl});
+  background-image: url(${(props) => props.$imageUrl});
   background-size: cover;
   background-position: center;
   transition: transform 0.5s ease;
@@ -90,7 +90,7 @@ export const Gallery = () => {
         <GalleryGrid>
           {GALLERY_IMAGES.map((image) => (
             <GalleryItem key={image.id}>
-              <GalleryImage imageUrl={image.url} />
+              <GalleryImage $imageUrl={image.url} />
               <GalleryOverlay>{image.name}</GalleryOverlay>
             </GalleryItem>
           ))}

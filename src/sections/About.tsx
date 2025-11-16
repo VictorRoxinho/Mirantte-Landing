@@ -1,196 +1,260 @@
 import styled from 'styled-components';
-import { MapPin, Waves, Check } from 'lucide-react';
 import { theme } from '../styles/theme';
 
 const AboutContainer = styled.section`
-  padding: 8rem 2rem;
-  background: linear-gradient(180deg, #fafafa 0%, white 100%);
+  background: #fff;
+  padding: 6rem 2rem 8rem;
   position: relative;
-  overflow: hidden;
-
-  &:before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(
-      circle,
-      rgba(217, 119, 6, 0.05) 0%,
-      transparent 70%
-    );
-    border-radius: 50%;
-  }
 
   @media (max-width: ${theme.breakpoints.tablet}) {
-    padding: ${theme.spacing.xxl} 1.5rem;
+    padding: 4rem 1.5rem 5rem;
   }
 `;
 
 const AboutContent = styled.div`
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
-  position: relative;
-  z-index: 1;
 `;
 
-const SectionTitle = styled.h2`
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
-  color: ${theme.colors.neutral['900']};
-  text-align: center;
-  margin-bottom: ${theme.spacing.md};
-  letter-spacing: -0.02em;
-
-  span {
-    background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-  }
-`;
-
-const SectionSubtitle = styled.p`
-  text-align: center;
-  font-size: 1.2rem;
-  color: #666;
-  max-width: 700px;
-  margin: 0 auto 4rem;
-  line-height: 1.7;
-
-  @media (max-width: ${theme.breakpoints.tablet}) {
-    font-size: 1rem;
-    margin-bottom: 3rem;
-  }
-`;
-
-const CardsGrid = styled.div`
+const MainContent = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-
-  @media (max-width: ${theme.breakpoints.mobile}) {
-    grid-template-columns: 1fr;
-    gap: ${theme.spacing.lg};
-  }
-`;
-
-const FeatureCard = styled.div`
-  background: ${theme.colors.neutral.white};
-  padding: 2.5rem;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-  overflow: hidden;
-
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #d97706 0%, #f59e0b 100%);
-    transform: scaleX(0);
-    transition: transform 0.4s ease;
-  }
-
-  &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
-
-    &:before {
-      transform: scaleX(1);
-    }
-  }
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
 
   @media (max-width: ${theme.breakpoints.tablet}) {
-    padding: 2rem;
+    grid-template-columns: 1fr;
+    gap: 3rem;
   }
 `;
 
-const IconWrapper = styled.div<{ $color: string }>`
-  width: 70px;
-  height: 70px;
-  background: linear-gradient(
-    135deg,
-    ${(props) => props.$color}20 0%,
-    ${(props) => props.$color}10 100%
-  );
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-  color: ${(props) => props.$color};
+const TextBlock = styled.div``;
 
-  svg {
-    width: 32px;
-    height: 32px;
-  }
-`;
-
-const CardTitle = styled.h3`
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: ${theme.colors.neutral['900']};
+const Eyebrow = styled.span`
+  display: inline-block;
+  color: ${theme.colors.primary.main};
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   margin-bottom: 1rem;
 `;
 
-const CardDescription = styled.p`
+const Headline = styled.h2`
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  font-weight: 700;
+  color: #0a0a0a;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+
+  strong {
+    color: ${theme.colors.primary.main};
+    font-weight: 800;
+  }
+`;
+
+const Description = styled.p`
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 2rem;
+
+  strong {
+    color: #0a0a0a;
+    font-weight: 600;
+  }
+`;
+
+const StatsList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-top: 2.5rem;
+`;
+
+const StatItem = styled.div`
+  border-left: 3px solid ${theme.colors.primary.main};
+  padding-left: 1rem;
+`;
+
+const StatNumber = styled.div`
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: ${theme.colors.primary.main};
+  line-height: 1;
+  margin-bottom: 0.5rem;
+`;
+
+const StatLabel = styled.div`
+  font-size: 0.95rem;
   color: #666;
-  line-height: 1.7;
+  font-weight: 500;
+`;
+
+const ImageGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  height: 500px;
+
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    height: 400px;
+  }
+`;
+
+const ImageBox = styled.div<{ $large?: boolean; $image: string }>`
+  background: url(${(props) => props.$image});
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  grid-row: ${(props) => (props.$large ? 'span 2' : 'span 1')};
+
+  &:after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.3));
+  }
+`;
+
+const DifferentialSection = styled.div`
+  margin-top: 6rem;
+  text-align: center;
+
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    margin-top: 4rem;
+  }
+`;
+
+const DifferentialTitle = styled.h3`
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #0a0a0a;
+  margin-bottom: 3rem;
+`;
+
+const DifferentialGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+`;
+
+const DifferentialCard = styled.div`
+  text-align: left;
+`;
+
+const DifferentialNumber = styled.div`
+  font-size: 3rem;
+  font-weight: 800;
+  color: ${theme.colors.primary.main};
+  opacity: 0.15;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+`;
+
+const DifferentialCardTitle = styled.h4`
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0a0a0a;
+  margin-bottom: 0.75rem;
+`;
+
+const DifferentialCardText = styled.p`
   font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
 `;
 
 export const About = () => {
   return (
     <AboutContainer id="about">
       <AboutContent>
-        <SectionTitle>
-          Por que escolher o <span>Mirantte</span>?
-        </SectionTitle>
-        <SectionSubtitle>
-          Um jeito novo de viver, com tudo que você precisa ao seu alcance
-        </SectionSubtitle>
+        <MainContent>
+          <TextBlock>
+            <Eyebrow>Costa Azul, Salvador</Eyebrow>
+            <Headline>
+              O lugar que você <strong>sempre quis morar</strong> está aqui
+            </Headline>
+            <Description>
+              Imagina acordar a <strong>300 metros da praia</strong>, tomar café
+              na varanda e decidir se vai trabalhar no coworking ou relaxar no
+              rooftop com piscina? No Mirantte, isso é só mais um dia normal.
+            </Description>
+            <Description>
+              Não é só um apartamento. É <strong>liberdade</strong> pra viver do
+              seu jeito, sem depender de carro, com tudo que importa pertinho —
+              e ainda sobra tempo pro que realmente vale a pena.
+            </Description>
 
-        <CardsGrid>
-          <FeatureCard>
-            <IconWrapper $color="#d97706">
-              <MapPin />
-            </IconWrapper>
-            <CardTitle>Pertinho de tudo</CardTitle>
-            <CardDescription>
-              A 300m da praia, perto de shoppings, mercados e dos melhores
-              pontos da cidade. Chega de perder tempo no trânsito!
-            </CardDescription>
-          </FeatureCard>
+            <StatsList>
+              <StatItem>
+                <StatNumber>300m</StatNumber>
+                <StatLabel>da praia do Costa Azul</StatLabel>
+              </StatItem>
+              <StatItem>
+                <StatNumber>13+</StatNumber>
+                <StatLabel>áreas de lazer completas</StatLabel>
+              </StatItem>
+              <StatItem>
+                <StatNumber>5 min</StatNumber>
+                <StatLabel>de shoppings e mercados</StatLabel>
+              </StatItem>
+              <StatItem>
+                <StatNumber>100%</StatNumber>
+                <StatLabel>pensado pra você</StatLabel>
+              </StatItem>
+            </StatsList>
+          </TextBlock>
 
-          <FeatureCard>
-            <IconWrapper $color="#059669">
-              <Waves />
-            </IconWrapper>
-            <CardTitle>Rooftop sensacional</CardTitle>
-            <CardDescription>
-              Piscina com vista privilegiada, área gourmet e muito espaço pra
-              relaxar ou receber os amigos. É quase um resort!
-            </CardDescription>
-          </FeatureCard>
+          <ImageGrid>
+            <ImageBox $large $image="/Rooftop.webp" />
+            <ImageBox $image="/Lobby.webp" />
+            <ImageBox $image="/Espaço gourmet.webp" />
+          </ImageGrid>
+        </MainContent>
 
-          <FeatureCard>
-            <IconWrapper $color="#2563eb">
-              <Check />
-            </IconWrapper>
-            <CardTitle>Pensado em você</CardTitle>
-            <CardDescription>
-              Cada metro foi planejado com inteligência. Seja pra morar ou
-              investir, você vai aproveitar cada cantinho.
-            </CardDescription>
-          </FeatureCard>
-        </CardsGrid>
+        <DifferentialSection>
+          <DifferentialTitle>
+            Por que o Mirantte é diferente de tudo?
+          </DifferentialTitle>
+          <DifferentialGrid>
+            <DifferentialCard>
+              <DifferentialNumber>01</DifferentialNumber>
+              <DifferentialCardTitle>
+                Localização estratégica
+              </DifferentialCardTitle>
+              <DifferentialCardText>
+                Costa Azul é o bairro que mais valoriza em Salvador. Você não tá
+                só morando bem — tá investindo no futuro.
+              </DifferentialCardText>
+            </DifferentialCard>
+
+            <DifferentialCard>
+              <DifferentialNumber>02</DifferentialNumber>
+              <DifferentialCardTitle>Rooftop de resort</DifferentialCardTitle>
+              <DifferentialCardText>
+                Piscina, churrasqueira, lounge, vista pro mar. Final de semana
+                aqui é evento — sem sair de casa.
+              </DifferentialCardText>
+            </DifferentialCard>
+
+            <DifferentialCard>
+              <DifferentialNumber>03</DifferentialNumber>
+              <DifferentialCardTitle>Zero desperdício</DifferentialCardTitle>
+              <DifferentialCardText>
+                Cada metro foi projetado com inteligência. Studios e
+                apartamentos que aproveitam TUDO, sem espaço perdido.
+              </DifferentialCardText>
+            </DifferentialCard>
+          </DifferentialGrid>
+        </DifferentialSection>
       </AboutContent>
     </AboutContainer>
   );

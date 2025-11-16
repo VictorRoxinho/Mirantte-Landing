@@ -3,19 +3,29 @@ import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import { Mail, MessageCircle, MapPin } from 'lucide-react';
 import { theme } from '../styles/theme';
-import { Button } from '../components/Button';
-import { Input, Textarea, Label, FormGroup } from '../components/Input';
-import { Card } from '../components/Card';
 import { CONTACT } from '../lib/constants';
 import { openWhatsApp, sendToWebhook } from '../lib/utils';
 
 const ContactContainer = styled.section`
-  background: linear-gradient(
-    135deg,
-    ${theme.colors.primary.light} 0%,
-    ${theme.colors.orange.light} 100%
-  );
-  padding: ${theme.spacing.xxxl} 2rem;
+  padding: 8rem 2rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  position: relative;
+  overflow: hidden;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -20%;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(
+      circle,
+      rgba(217, 119, 6, 0.1) 0%,
+      transparent 70%
+    );
+    border-radius: 50%;
+  }
 
   @media (max-width: ${theme.breakpoints.tablet}) {
     padding: ${theme.spacing.xxl} 1.5rem;
@@ -23,101 +33,214 @@ const ContactContainer = styled.section`
 `;
 
 const ContactContent = styled.div`
-  max-width: 1280px;
+  max-width: 1100px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 `;
 
 const SectionTitle = styled.h2`
-  font-size: ${theme.typography.fontSize['4xl']};
-  font-weight: ${theme.typography.fontWeight.bold};
-  color: ${theme.colors.neutral['900']};
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: ${theme.colors.neutral.white};
   text-align: center;
   margin-bottom: ${theme.spacing.md};
-
-  @media (max-width: ${theme.breakpoints.tablet}) {
-    font-size: ${theme.typography.fontSize['3xl']};
-  }
+  letter-spacing: -0.02em;
 `;
 
 const SectionSubtitle = styled.p`
-  font-size: ${theme.typography.fontSize.lg};
-  color: ${theme.colors.neutral['600']};
   text-align: center;
-  margin-bottom: ${theme.spacing.xxl};
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 4rem;
+  line-height: 1.7;
+
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    font-size: 1rem;
+    margin-bottom: 3rem;
+  }
 `;
 
 const ContactGrid = styled.div`
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: ${theme.spacing.xxl};
+  grid-template-columns: 1.2fr 1fr;
+  gap: 3rem;
 
   @media (max-width: ${theme.breakpoints.desktop}) {
     grid-template-columns: 1fr;
-    gap: ${theme.spacing.xl};
+    gap: 2rem;
   }
 `;
 
-const FormCard = styled(Card)`
-  background-color: ${theme.colors.neutral.white};
+const FormCard = styled.form`
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 3rem;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    padding: 2rem;
+  }
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 1.5rem;
+`;
+
+const Label = styled.label`
+  display: block;
+  color: ${theme.colors.neutral.white};
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: ${theme.colors.neutral.white};
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+
+  &:focus {
+    outline: none;
+    border-color: ${theme.colors.primary.main};
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+`;
+
+const Textarea = styled.textarea`
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: ${theme.colors.neutral.white};
+  font-size: 1rem;
+  min-height: 120px;
+  resize: vertical;
+  font-family: inherit;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: ${theme.colors.primary.main};
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+`;
+
+const ErrorMessage = styled.span`
+  color: #fca5a5;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+`;
+
+const SubmitButton = styled.button`
+  width: 100%;
+  background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+  color: ${theme.colors.neutral.white};
+  border: none;
+  padding: 1.2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(217, 119, 6, 0.4);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(217, 119, 6, 0.5);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+`;
+
+const SuccessMessage = styled.div`
+  padding: ${theme.spacing.md};
+  background: rgba(5, 150, 105, 0.2);
+  border: 1px solid rgba(5, 150, 105, 0.3);
+  color: #6ee7b7;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: ${theme.spacing.md};
+  font-weight: 500;
 `;
 
 const ContactCardsGrid = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing.lg};
+  gap: 1.5rem;
 `;
 
-const ContactCard = styled(Card)`
+const ContactCard = styled.div`
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   cursor: pointer;
+  transition: all 0.3s ease;
 
   &:hover {
-    background-color: ${theme.colors.neutral['50']};
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(10px);
+  }
+
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    padding: 1.5rem;
   }
 `;
 
-const CardIconWrapper = styled.div<{ color?: string }>`
-  width: 3.5rem;
-  height: 3.5rem;
-  border-radius: 0.75rem;
+const ContactCardIcon = styled.div<{ $color: string }>`
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(
+    135deg,
+    ${(props) => props.$color}30 0%,
+    ${(props) => props.$color}20 100%
+  );
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: ${theme.spacing.md};
-  background-color: ${(props) => props.color || theme.colors.primary.light};
-  color: ${(props) => {
-    if (props.color === theme.colors.secondary.light)
-      return theme.colors.secondary.main;
-    if (props.color === '#dbeafe') return theme.colors.blue;
-    return theme.colors.primary.main;
-  }};
+  margin-bottom: 1rem;
+  color: ${(props) => props.$color};
 
   svg {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 28px;
+    height: 28px;
   }
 `;
 
-const CardTitle = styled.h3`
-  font-size: ${theme.typography.fontSize['2xl']};
-  font-weight: ${theme.typography.fontWeight.bold};
-  color: ${theme.colors.neutral['900']};
-  margin-bottom: ${theme.spacing.sm};
+const ContactCardTitle = styled.h3`
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: ${theme.colors.neutral.white};
+  margin-bottom: 0.5rem;
 `;
 
-const CardDescription = styled.p`
-  font-size: ${theme.typography.fontSize.base};
-  color: ${theme.colors.neutral['600']};
-  line-height: 1.6;
-`;
-
-const SuccessMessage = styled.div`
-  padding: ${theme.spacing.md};
-  background-color: ${theme.colors.secondary.light};
-  color: ${theme.colors.secondary.main};
-  border-radius: 0.5rem;
-  text-align: center;
-  margin-bottom: ${theme.spacing.md};
-  font-weight: ${theme.typography.fontWeight.medium};
+const ContactCardText = styled.p`
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.05rem;
 `;
 
 interface FormData {
@@ -137,14 +260,11 @@ export const Contact = () => {
   const [showSuccess, setShowSuccess] = React.useState(false);
 
   const onSubmit = async (data: FormData) => {
-    // Enviar para webhook
     await sendToWebhook(data, CONTACT.webhookUrl);
 
-    // Abrir WhatsApp com mensagem
     const message = `Olá! Meu nome é ${data.name}. ${data.message}\n\nE-mail: ${data.email}\nTelefone: ${data.phone}`;
     openWhatsApp(CONTACT.whatsapp, message);
 
-    // Mostrar mensagem de sucesso
     setShowSuccess(true);
     reset();
 
@@ -165,112 +285,95 @@ export const Contact = () => {
   return (
     <ContactContainer id="contact">
       <ContactContent>
-        <SectionTitle>Entre em contato</SectionTitle>
+        <SectionTitle>Vamos conversar?</SectionTitle>
         <SectionSubtitle>
-          Preencha o formulário ou escolha uma das opções de contato abaixo
+          Preencha o formulário ou escolha a forma que preferir pra falar com a
+          gente
         </SectionSubtitle>
 
         <ContactGrid>
-          <FormCard>
+          <FormCard onSubmit={handleSubmit(onSubmit)}>
             {showSuccess && (
               <SuccessMessage>
                 Mensagem enviada com sucesso! Redirecionando para o WhatsApp...
               </SuccessMessage>
             )}
 
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <FormGroup>
-                <Label htmlFor="name">Nome completo *</Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Seu nome"
-                  {...register('name', { required: true })}
-                />
-                {errors.name && (
-                  <span style={{ color: '#dc2626', fontSize: '0.875rem' }}>
-                    Campo obrigatório
-                  </span>
-                )}
-              </FormGroup>
+            <FormGroup>
+              <Label htmlFor="name">Nome completo</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Como você se chama?"
+                {...register('name', { required: true })}
+              />
+              {errors.name && <ErrorMessage>Campo obrigatório</ErrorMessage>}
+            </FormGroup>
 
-              <FormGroup>
-                <Label htmlFor="email">E-mail *</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="seu@email.com"
-                  {...register('email', {
-                    required: true,
-                    pattern: /^\S+@\S+$/i,
-                  })}
-                />
-                {errors.email && (
-                  <span style={{ color: '#dc2626', fontSize: '0.875rem' }}>
-                    E-mail válido obrigatório
-                  </span>
-                )}
-              </FormGroup>
+            <FormGroup>
+              <Label htmlFor="email">E-mail</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="seu@email.com"
+                {...register('email', {
+                  required: true,
+                  pattern: /^\S+@\S+$/i,
+                })}
+              />
+              {errors.email && (
+                <ErrorMessage>E-mail válido obrigatório</ErrorMessage>
+              )}
+            </FormGroup>
 
-              <FormGroup>
-                <Label htmlFor="phone">Telefone *</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="(71) 99999-9999"
-                  {...register('phone', { required: true })}
-                />
-                {errors.phone && (
-                  <span style={{ color: '#dc2626', fontSize: '0.875rem' }}>
-                    Campo obrigatório
-                  </span>
-                )}
-              </FormGroup>
+            <FormGroup>
+              <Label htmlFor="phone">Telefone</Label>
+              <Input
+                id="phone"
+                type="tel"
+                placeholder="(71) 99999-9999"
+                {...register('phone', { required: true })}
+              />
+              {errors.phone && <ErrorMessage>Campo obrigatório</ErrorMessage>}
+            </FormGroup>
 
-              <FormGroup>
-                <Label htmlFor="message">Mensagem</Label>
-                <Textarea
-                  id="message"
-                  placeholder="Conte-nos sobre seu interesse no Mirantte..."
-                  {...register('message')}
-                />
-              </FormGroup>
+            <FormGroup>
+              <Label htmlFor="message">Mensagem</Label>
+              <Textarea
+                id="message"
+                placeholder="Conta pra gente o que você está procurando..."
+                {...register('message')}
+              />
+            </FormGroup>
 
-              <Button
-                type="submit"
-                $variant="primary"
-                $size="large"
-                disabled={isSubmitting}
-                style={{ width: '100%' }}
-              >
-                {isSubmitting ? 'Enviando...' : 'Enviar Mensagem'}
-              </Button>
-            </form>
+            <SubmitButton type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Enviando...' : 'Enviar mensagem'}
+            </SubmitButton>
           </FormCard>
 
           <ContactCardsGrid>
             <ContactCard onClick={handleWhatsAppClick}>
-              <CardIconWrapper color={theme.colors.secondary.light}>
+              <ContactCardIcon $color="#059669">
                 <MessageCircle />
-              </CardIconWrapper>
-              <CardTitle>WhatsApp</CardTitle>
-              <CardDescription>{CONTACT.whatsappFormatted}</CardDescription>
+              </ContactCardIcon>
+              <ContactCardTitle>WhatsApp</ContactCardTitle>
+              <ContactCardText>{CONTACT.whatsappFormatted}</ContactCardText>
             </ContactCard>
 
             <ContactCard onClick={handleEmailClick}>
-              <CardIconWrapper color="#dbeafe">
+              <ContactCardIcon $color="#2563eb">
                 <Mail />
-              </CardIconWrapper>
-              <CardTitle>E-mail</CardTitle>
-              <CardDescription>{CONTACT.email}</CardDescription>
+              </ContactCardIcon>
+              <ContactCardTitle>E-mail</ContactCardTitle>
+              <ContactCardText>{CONTACT.email}</ContactCardText>
             </ContactCard>
 
             <ContactCard>
-              <CardIconWrapper color={theme.colors.primary.light}>
+              <ContactCardIcon $color="#d97706">
                 <MapPin />
-              </CardIconWrapper>
-              <CardTitle>Localização</CardTitle>
-              <CardDescription>{CONTACT.location}</CardDescription>
+              </ContactCardIcon>
+              <ContactCardTitle>Venha nos visitar</ContactCardTitle>
+              <ContactCardText>{CONTACT.location}</ContactCardText>
             </ContactCard>
           </ContactCardsGrid>
         </ContactGrid>

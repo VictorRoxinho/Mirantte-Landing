@@ -7,7 +7,7 @@ import { scrollToSection } from '../lib/utils';
 
 const TypologiesContainer = styled.section`
   background-color: ${theme.colors.neutral.white};
-  padding: ${theme.spacing.xxxl} 2rem;
+  padding: 8rem 2rem;
 
   @media (max-width: ${theme.breakpoints.tablet}) {
     padding: ${theme.spacing.xxl} 1.5rem;
@@ -15,47 +15,67 @@ const TypologiesContainer = styled.section`
 `;
 
 const TypologiesContent = styled.div`
-  max-width: 1280px;
+  max-width: 1200px;
   margin: 0 auto;
 `;
 
 const SectionTitle = styled.h2`
-  font-size: ${theme.typography.fontSize['4xl']};
-  font-weight: ${theme.typography.fontWeight.bold};
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
   color: ${theme.colors.neutral['900']};
   text-align: center;
-  margin-bottom: ${theme.spacing.xxl};
+  margin-bottom: ${theme.spacing.md};
+  letter-spacing: -0.02em;
+
+  span {
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+`;
+
+const SectionSubtitle = styled.p`
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  max-width: 700px;
+  margin: 0 auto 4rem;
+  line-height: 1.7;
 
   @media (max-width: ${theme.breakpoints.tablet}) {
-    font-size: ${theme.typography.fontSize['3xl']};
+    font-size: 1rem;
+    margin-bottom: 3rem;
   }
 `;
 
 const TypologyGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: ${theme.spacing.xl};
+  gap: 2.5rem;
 
   @media (max-width: ${theme.breakpoints.mobile}) {
     grid-template-columns: 1fr;
+    gap: ${theme.spacing.xl};
   }
 `;
 
 const TypologyCard = styled.div`
-  background-color: ${theme.colors.neutral.white};
-  border-radius: 1rem;
+  background: ${theme.colors.neutral.white};
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: ${theme.shadows.lg};
-  transition: ${theme.transitions.default};
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+  cursor: pointer;
 
   &:hover {
-    transform: translateY(-8px);
-    box-shadow: ${theme.shadows.xl};
+    transform: translateY(-15px) scale(1.02);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15);
   }
 `;
 
 const TypologyImage = styled.div<{ $imageUrl?: string }>`
-  width: 100%;
   height: 280px;
   background: ${(props) =>
     props.$imageUrl
@@ -67,48 +87,80 @@ const TypologyImage = styled.div<{ $imageUrl?: string }>`
   align-items: center;
   justify-content: center;
   color: ${theme.colors.neutral.white};
-  font-size: ${theme.typography.fontSize['3xl']};
-  font-weight: ${theme.typography.fontWeight.bold};
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
+  }
 `;
 
 const TypologyBody = styled.div`
-  padding: ${theme.spacing.xl};
+  padding: 2rem;
 `;
 
 const TypologyHeader = styled.div`
-  margin-bottom: ${theme.spacing.lg};
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f5f5f5;
 `;
 
 const TypologyName = styled.h3`
-  font-size: ${theme.typography.fontSize['2xl']};
-  font-weight: ${theme.typography.fontWeight.bold};
+  font-size: 1.75rem;
+  font-weight: 700;
   color: ${theme.colors.neutral['900']};
-  margin-bottom: 0.5rem;
 `;
 
-const TypologyArea = styled.p`
-  font-size: ${theme.typography.fontSize.lg};
+const TypologyArea = styled.span`
+  font-size: 1.1rem;
   color: ${theme.colors.primary.main};
-  font-weight: ${theme.typography.fontWeight.semibold};
+  font-weight: 600;
 `;
 
 const FeatureList = styled.ul`
   list-style: none;
-  margin-bottom: ${theme.spacing.lg};
+  margin-bottom: 2rem;
 `;
 
 const FeatureItem = styled.li`
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.5rem 0;
-  color: ${theme.colors.neutral['600']};
-  font-size: ${theme.typography.fontSize.base};
+  padding: 0.75rem 0;
+  color: #666;
+  font-size: 1rem;
 
   svg {
     color: ${theme.colors.secondary.main};
     flex-shrink: 0;
+  }
+`;
+
+const InterestButton = styled(Button)`
+  width: 100%;
+  padding: 1rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+
+  &:hover {
+    box-shadow: 0 6px 25px rgba(217, 119, 6, 0.4);
   }
 `;
 
@@ -126,7 +178,13 @@ export const Typologies = () => {
   return (
     <TypologiesContainer id="typologies">
       <TypologiesContent>
-        <SectionTitle>Escolha sua tipologia</SectionTitle>
+        <SectionTitle>
+          Encontre seu <span>espaço ideal</span>
+        </SectionTitle>
+        <SectionSubtitle>
+          Do studio compacto ao apartamento de quarto e sala, temos a opção
+          perfeita pra você
+        </SectionSubtitle>
         <TypologyGrid>
           {TYPOLOGIES.map((typology) => (
             <TypologyCard key={typology.id}>
@@ -146,14 +204,13 @@ export const Typologies = () => {
                     </FeatureItem>
                   ))}
                 </FeatureList>
-                <Button
+                <InterestButton
                   $variant="primary"
                   $size="medium"
                   onClick={handleInterest}
-                  style={{ width: '100%' }}
                 >
-                  Tenho Interesse
-                </Button>
+                  Quero conhecer
+                </InterestButton>
               </TypologyBody>
             </TypologyCard>
           ))}

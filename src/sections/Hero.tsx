@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ChevronDown, MessageCircle } from 'lucide-react';
 import { theme } from '../styles/theme';
@@ -13,33 +14,38 @@ const HeroContainer = styled.section`
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
 `;
 
-const HeroBackground = styled.div`
+const HeroBackground = styled.div<{ $scroll: number }>`
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   background: linear-gradient(
       135deg,
-      rgba(23, 23, 23, 0.7),
-      rgba(217, 119, 6, 0.3)
+      rgba(15, 23, 42, 0.8),
+      rgba(217, 119, 6, 0.2)
     ),
     url('/Rooftop.webp');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  transform: scale(${(props) => 1 + props.$scroll * 0.0002});
+  transition: transform 0.1s ease-out;
+`;
 
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 200px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent);
-  }
+const HeroOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at 30% 50%,
+    rgba(217, 119, 6, 0.15) 0%,
+    transparent 50%
+  );
 `;
 
 const HeroContent = styled.div`
@@ -49,6 +55,18 @@ const HeroContent = styled.div`
   color: ${theme.colors.neutral.white};
   max-width: 900px;
   padding: 0 2rem;
+  animation: fadeInUp 1s ease-out;
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
   @media (max-width: ${theme.breakpoints.tablet}) {
     padding: 0 1.5rem;
@@ -56,36 +74,31 @@ const HeroContent = styled.div`
 `;
 
 const HeroTitle = styled.h1`
-  font-size: ${theme.typography.fontSize['6xl']};
-  font-weight: ${theme.typography.fontWeight.bold};
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
   margin-bottom: ${theme.spacing.md};
   line-height: 1.1;
+  letter-spacing: -0.02em;
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 
-  @media (max-width: ${theme.breakpoints.tablet}) {
-    font-size: ${theme.typography.fontSize['4xl']};
-  }
-
-  @media (max-width: ${theme.breakpoints.mobile}) {
-    font-size: ${theme.typography.fontSize['3xl']};
+  span {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    display: block;
+    margin-top: 0.5rem;
   }
 `;
 
 const HeroSubtitle = styled.p`
-  font-size: ${theme.typography.fontSize['2xl']};
-  font-weight: ${theme.typography.fontWeight.normal};
-  margin-bottom: ${theme.spacing.xl};
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: 400;
+  margin-bottom: 2.5rem;
   opacity: 0.95;
+  line-height: 1.6;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-
-  @media (max-width: ${theme.breakpoints.tablet}) {
-    font-size: ${theme.typography.fontSize.xl};
-  }
-
-  @media (max-width: ${theme.breakpoints.mobile}) {
-    font-size: ${theme.typography.fontSize.lg};
-    margin-bottom: ${theme.spacing.lg};
-  }
 `;
 
 const HeroActions = styled.div`
@@ -100,34 +113,72 @@ const HeroActions = styled.div`
   }
 `;
 
+const PrimaryButton = styled(Button)`
+  padding: 1rem 2.5rem;
+  font-size: 1.05rem;
+  border-radius: 50px;
+  box-shadow: 0 8px 25px rgba(217, 119, 6, 0.4);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(217, 119, 6, 0.5);
+  }
+`;
+
+const SecondaryButton = styled(Button)`
+  padding: 1rem 2.5rem;
+  font-size: 1.05rem;
+  border-radius: 50px;
+  background: transparent;
+  border: 2px solid ${theme.colors.neutral.white};
+  box-shadow: none;
+
+  &:hover {
+    background: ${theme.colors.neutral.white};
+    color: ${theme.colors.primary.main};
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+  }
+`;
+
 const ScrollIndicator = styled.div`
   position: absolute;
   bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
   cursor: pointer;
-  animation: bounce 2s infinite;
   color: ${theme.colors.neutral.white};
   opacity: 0.8;
   transition: ${theme.transitions.default};
+  animation: float 3s ease-in-out infinite;
 
-  &:hover {
-    opacity: 1;
-    transform: translateX(-50%) scale(1.1);
-  }
-
-  @keyframes bounce {
+  @keyframes float {
     0%,
     100% {
       transform: translateX(-50%) translateY(0);
     }
     50% {
-      transform: translateX(-50%) translateY(10px);
+      transform: translateX(-50%) translateY(-20px);
     }
+  }
+
+  &:hover {
+    opacity: 1;
   }
 `;
 
 export const Hero = () => {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleWhatsAppClick = () => {
     openWhatsApp(
       CONTACT.whatsapp,
@@ -145,28 +196,33 @@ export const Hero = () => {
 
   return (
     <HeroContainer id="hero">
-      <HeroBackground />
+      <HeroBackground $scroll={scrollY} />
+      <HeroOverlay />
       <HeroContent>
-        <HeroTitle>Viva a poucos metros do mar</HeroTitle>
+        <HeroTitle>
+          Viva a poucos metros do mar
+          <span>no coração de Salvador</span>
+        </HeroTitle>
         <HeroSubtitle>
-          Studios e Apartamentos no Costa Azul, Salvador
+          Studios e apartamentos modernos no Costa Azul, onde o estilo de vida
+          encontra o conforto que você sempre quis
         </HeroSubtitle>
         <HeroActions>
-          <Button
+          <PrimaryButton
             $variant="primary"
             $size="large"
             onClick={handleScheduleClick}
           >
             Agendar Visita
-          </Button>
-          <Button
+          </PrimaryButton>
+          <SecondaryButton
             $variant="outline"
             $size="large"
             onClick={handleWhatsAppClick}
           >
             <MessageCircle size={20} />
             Falar no WhatsApp
-          </Button>
+          </SecondaryButton>
         </HeroActions>
       </HeroContent>
       <ScrollIndicator onClick={handleScrollClick}>
